@@ -1,15 +1,34 @@
-"""
-Kết nối Redis dùng chung cho rate limiter và cost guard.
+from functools import lru_cache
 
-Yêu cầu:
-  • Đọc REDIS_URL từ config
-  • App vẫn phải KHỞI ĐỘNG ĐƯỢC khi Redis chưa sẵn sàng (đừng ping Redis lúc import)
-  • redis_healthy() dùng cho GET /ready: Redis không kết nối được → False
-"""
+from fastapi import HTTPException
+from redis import Redis, RedisError
 
-r = None  # TODO: tạo client, vd redis.from_url(settings.redis_url, decode_responses=True)
+from app.config import settings
+
+
+@lru_cache(maxsize=1)
+def get_redis_client() -> Redis:
+    if not settings.redis_url:
+        raise HTTPException(status_code=503, detail="Redis unavailable")
+    try:
+        return Redis.from_url(
+            settings.redis_url,
+            decode_responses=True,
+            socket_connect_timeout=2,
+            socket_timeout=2,
+        )
+    except ValueError:
+        raise HTTPException(status_code=503, detail="Redis unavailable") from None
 
 
 def redis_healthy() -> bool:
-    # TODO: ping Redis; lỗi kết nối → False
-    return False
+    try:
+        return bool(get_redis_client().ping())
+    except (HTTPException, RedisError):
+        return False
+
+
+def close_redis() -> None:
+    if get_redis_client.cache_info().currsize:
+        get_redis_client().close()
+        get_redis_client.cache_clear()
