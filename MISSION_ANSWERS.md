@@ -68,7 +68,7 @@ POST http://127.0.0.1/ask     → 200 OK, Server: nginx, answer có nội dung
 
 ## Part 3 — Cloud Deployment
 
-Ứng dụng cần deploy là `06-lab-complete/`. URL public và ảnh cloud đang chờ xác thực tài khoản nền tảng. [DEPLOYMENT.md](DEPLOYMENT.md) ghi cấu hình và bốn kiểm tra HTTP đã chạy trên Docker Compose local.
+Agent `06-lab-complete/` đã deploy lên Render từ Blueprint `day14-lab`. URL public là `https://production-agent-hlw1.onrender.com`. Kiểm tra public xác nhận `/health` và `/ready` trả `200`. `POST /ask` thiếu key trả `401` và có key hợp lệ trả `200`. Các ca kiểm tra và cấu hình được ghi trong [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ### Exercises 3.1–3.2 — Railway và Render
 

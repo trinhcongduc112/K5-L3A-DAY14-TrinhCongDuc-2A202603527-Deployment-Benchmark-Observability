@@ -2,16 +2,22 @@
 
 ## Trạng thái
 
-**URL public:** Chưa có. Phiên làm việc chưa có xác thực ghi GitHub và chưa có kết nối tài khoản Railway hoặc Render. Agent, Redis và bốn ca HTTP đã xác minh trên Docker Compose local ngày 25/11/2026 (GMT+7).
+**Nền tảng** — Render, Blueprint `day14-lab`, branch `main`, commit triển khai `d2f4c39`.
+
+**URL public** — [production-agent-hlw1.onrender.com](https://production-agent-hlw1.onrender.com/health). Render báo web service đã deploy và Key Value khả dụng. Agent và Redis cũng đã được kiểm tra trên Docker Compose local.
 
 | Kiểm tra | Local | Public |
 |---|---:|---|
-| `GET /health` | `200` | Chờ deploy |
-| `GET /ready` | `200` | Chờ deploy |
-| `POST /ask` thiếu `X-API-Key` | `401` | Chờ deploy |
-| `POST /ask` có `X-API-Key` hợp lệ | `200` | Chờ deploy |
+| `GET /health` | `200` | `200` |
+| `GET /ready` | `200` | `200` |
+| `POST /ask` thiếu `X-API-Key` | `401` | `401` |
+| `POST /ask` có `X-API-Key` hợp lệ | `200` | `200` |
 
-Ảnh `screenshots/dashboard.png`, `screenshots/running.png` và `screenshots/test.png` cần phiên deploy cloud thật để ghi nhận.
+## Ảnh triển khai
+
+- [Dashboard Render với web service và Key Value](screenshots/dashboard.png)
+- [Web service Live trên Render](screenshots/running.png)
+- [Kết quả kiểm tra cả bốn mã HTTP](screenshots/test.png)
 
 ## Cấu hình nền tảng
 
